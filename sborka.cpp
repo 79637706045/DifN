@@ -31,7 +31,8 @@ class yzel{
 	}
 
 };
-/**************************/
+
+
 class sTree{
 	//данные класса
 	yzel* root;
@@ -47,6 +48,13 @@ class sTree{
 	
 	void view(yzel* cur, int level);
 	
+	void rek_d(sTree* stemp, sTree* ftemp){
+		;
+	}
+/*	void reck_for_dif(sTree* temp){
+		//в неу вузувать функксии для диффинга некоторых вещей
+	}*/
+	
 	public:
 
 	//конструктор и деструктор
@@ -60,13 +68,7 @@ class sTree{
 		delete_tree(this->root);
 		std::cerr<<"Distryktor otrabotal"<<std::endl;
 	}
-	
-	
-	
-	
-	
-	
-	
+		
 	void sozdanye_bazovogo_dereva();
 
 	void print_dif(){
@@ -74,19 +76,35 @@ class sTree{
 		std::cout<<std::endl;
 	}
 	
+	sTree* differentiate(){//ranche differ
+	/* План: для кажого узла вызывать функцию дифференциате, котораю и трансформирует узел,
+	может она и что-то возваращать, когда умножить и поделить. */
+		
+		sTree* pS = new sTree(0,0);
+			
+		rek_d(pS, this);
 	
+		puts(" ");
+		return pS;
+	}
 };
-
-
 
 
 
 int main(){
 
-	sTree L(1,0);
-	L.print_dif();
-	L.sozdanye_bazovogo_dereva();
-	L.print_dif();
+	std::cout<<"Sozdanie bazovogo dereva"<<std::endl;
+	sTree F(0,0);
+	F.sozdanye_bazovogo_dereva();
+	std::cout<<"Bazovoe derevo:"<<std::endl;
+	F.print_dif();
+	
+	std::cout<<"Sozdanie differencirovannogo dereva"<<std::endl;
+	sTree* pS = F.differentiate();
+	std::cout<<"Ddifferencirovannoe derevo:"<<std::endl;
+	pS->print_dif();
+	
+	delete(pS);
 	return 0;
 }
 
@@ -112,6 +130,8 @@ void sTree::sozdanye_bazovogo_dereva(){
  */
  /*this имеет type 1; value 0;*/
 	
+	this->root->type = 1;
+	this->root->value = 0;
 	
 	this->root->left = new yzel(1,2);
 	this->root->left->left = new yzel(3,0);
