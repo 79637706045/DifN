@@ -48,9 +48,150 @@ class sTree{
 	
 	void view(yzel* cur, int level);
 	
-	void rek_d(sTree* stemp, sTree* ftemp){
-		;
+	void rek_d(yzel* stemp, yzel* ftemp){
+		switch (ftemp->type){
+/*****************************************/			
+			case 0 : {//цифры
+			
+       		stemp->type = 0;
+       		stemp->value = 0;
+       		
+			break;
+			}
+/****************************************/			
+			case 1: {//операция
+				
+				switch(ftemp->value){
+					
+					case 0 : {//сложение
+						
+						stemp->type = 1;
+						stemp->value = 0;
+						
+						stemp->left = new yzel(-1,-1);
+						stemp->right = new yzel(-1,-1);
+						
+						rek_d(stemp->left, ftemp->left);
+						rek_d(stemp->right, ftemp->right);
+						break;
+					}	
+					
+					case 1 : {//вычитание
+						
+						stemp->type = 1;
+						stemp->value = 1;
+						
+						stemp->left = new yzel(-1,-1);
+						stemp->right = new yzel(-1,-1);
+						
+						rek_d(stemp->left, ftemp->left);
+						rek_d(stemp->right, ftemp->right);
+						break;
+					}
+					
+					case 2 : {//умножение
+						
+						stemp->type = 1;
+						stemp->value = 0;
+						
+						stemp->left = new yzel(-1,-1);
+						stemp->left->type = 1;
+						stemp->left->value = 2;
+						
+						stemp->right = new yzel(-1,-1);
+						stemp->right->type = 1;
+						stemp->right->value = 2;
+						
+						stemp->left->left = new yzel(-1,-1);
+						stemp->left->right = new yzel(-1,-1);
+						rek_d(stemp->left->left, ftemp->left);
+						copy(stemp->left->right, ftemp->right);
+						
+						stemp->right->left = new yzel(-1,-1);
+						stemp->right->right = new yzel(-1,-1);
+						copy(stemp->right->left, ftemp->left);
+						rek_d(stemp->right->right, ftemp->right);
+						
+						break;
+					}
+					
+					case 3 : {//деление
+						
+						stemp->type = 1;
+						stemp->value = 3;
+						
+						stemp->left = new yzel(-1,-1);
+						stemp->left->type = 1;
+						stemp->left->value = 1;
+						
+						stemp->right = new yzel(-1,-1);
+						stemp->right->type = 1;
+						stemp->right->value = 2;
+						
+						stemp->left->left = new yzel(-1,-1);
+						stemp->left->right = new yzel(-1,-1);
+						stemp->left->left->type = 1;
+						stemp->left->left->value = 2;
+						stemp->left->right->type = 1;
+						stemp->left->right->value = 2;
+						
+						stemp->right->left = new yzel(-1,-1);
+						stemp->right->right = new yzel(-1,-1);
+						copy(stemp->right->left, ftemp->right);
+						copy(stemp->right->right, ftemp->right);
+						
+						stemp->left->left->left = new yzel(-1,-1);
+						stemp->left->left->right = new yzel(-1,-1);
+						stemp->left->right->left = new yzel(-1,-1);
+						stemp->left->right->right = new yzel(-1,-1);
+						rek_d(stemp->left->left->left, ftemp->left);
+						copy(stemp->left->left->right, ftemp->right);
+						copy(stemp->left->right->left, ftemp->left);
+						rek_d(stemp->left->right->right, ftemp->right);
+						
+						break;
+					}
+					
+					default: {        	
+    		
+       					std::cout<<"ERROR, incorrect value, of the element"<<std::endl;
+       		
+						break;
+					}
+				
+				};
+					
+			break;
+			}
+/**************************************/
+    		default: {        	
+    		
+       		std::cout<<"ERROR, incorrect type, of the element"<<std::endl;
+       		
+			break;
+			}
+				
+		};
 	}
+	
+void copy(yzel* stemp, yzel* ftemp){
+		if(ftemp){
+			
+			stemp->type = ftemp->type;
+			stemp->value = ftemp->value;
+			
+			if(ftemp->left != NULL){
+				stemp->left = new yzel(-1,-1);
+			}
+			
+			if(ftemp->right != NULL){
+				stemp->right = new yzel(-1,-1);
+			}
+			
+			copy(stemp->left, ftemp->left);
+			copy(stemp->right, ftemp->right);
+		}
+}
 /*	void reck_for_dif(sTree* temp){
 		//в неу вузувать функксии для диффинга некоторых вещей
 	}*/
@@ -80,9 +221,9 @@ class sTree{
 	/* План: для кажого узла вызывать функцию дифференциате, котораю и трансформирует узел,
 	может она и что-то возваращать, когда умножить и поделить. */
 		
-		sTree* pS = new sTree(0,0);
+		sTree* pS = new sTree(-1,-1);
 			
-		rek_d(pS, this);
+		rek_d(pS->root, this->root);
 	
 		puts(" ");
 		return pS;
@@ -94,7 +235,7 @@ class sTree{
 int main(){
 
 	std::cout<<"Sozdanie bazovogo dereva"<<std::endl;
-	sTree F(0,0);
+	sTree F(-1,-1);
 	F.sozdanye_bazovogo_dereva();
 	std::cout<<"Bazovoe derevo:"<<std::endl;
 	F.print_dif();
@@ -140,7 +281,7 @@ void sTree::sozdanye_bazovogo_dereva(){
 	this->root->left->left->right = NULL;
 	
 	this->root->right = new yzel(1,3);
-	this->root->right->left = new yzel(3,2);
+	this->root->right->left = new yzel(3,1);
 	this->root->right->right = new yzel(0,48);
 	this->root->right->left->left = new yzel(2,0);
 	this->root->left->left->right = NULL;
