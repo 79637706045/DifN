@@ -32,7 +32,7 @@ class yzel{
 
 };
 
-
+/* через стек может вывод в латех сделать */
 class sTree{
 	//данные класса
 	yzel* root;
@@ -47,6 +47,16 @@ class sTree{
 	}
 	
 	void view(yzel* cur, int level);
+	
+	void x_search(yzel* tempr, int* counter){
+			if(tempr){
+				if(tempr->type == 2){
+					(*counter)++;
+				}
+				x_search(tempr->left, counter);
+				x_search(tempr->right, counter);
+			}
+	}
 	
 	void rek_d(yzel* stemp, yzel* ftemp){
 		switch (ftemp->type){
@@ -164,6 +174,79 @@ class sTree{
 			break;
 			}
 /**************************************/
+
+			case 2 : {//переменная  x1, x2, x3 ...
+			
+       		stemp->type = 0;
+       		stemp->value = 1;
+       		
+			break;
+			}
+			
+/************************************/
+			case 3 : {//функция
+			
+					switch(ftemp->value){
+					
+					case 0 : {//ln
+						
+						int n = 0;
+						x_search(ftemp->left, &n);
+												
+						if(n > 0){
+							
+						stemp->type = 1;
+						stemp->value = 2;
+						stemp->right = new yzel(-1,-1);
+							
+						rek_d(stemp->right, ftemp->left);//эта хрень, только если в ftemp->left есть функции
+						//в противном случай в этот узел деление закинуть
+						//нужна функция узнавания, есть ли дерево
+						
+						//////////////////////
+						stemp->left = new yzel(-1,-1);
+						stemp->left->type = 1;
+						stemp->left->value = 3;
+						
+						stemp->left->left = new yzel(-1,-1);
+						stemp->left->left->type = 0;
+						stemp->left->left->value = 1;
+						
+						stemp->left->right = new yzel(-1,-1);
+						copy(stemp->left->right, ftemp->left);
+						}
+						
+						else{
+						stemp->type = 1;
+						stemp->value = 3;
+						
+						stemp->right = new yzel(-1,-1);
+						copy(stemp->right, ftemp->left);
+						
+						stemp->left = new yzel(-1,-1);
+						stemp->left->type = 0;
+						stemp->left->value = 1;
+						
+						}
+						
+						break;
+					}	
+					
+					default: {        	
+    		
+       					std::cout<<"ERROR, incorrect value, of the element"<<std::endl;
+       		
+						break;
+					};
+				
+					};
+					
+       		
+			break;
+			}
+			
+/****************************************/			
+			
     		default: {        	
     		
        		std::cout<<"ERROR, incorrect type, of the element"<<std::endl;
@@ -173,6 +256,7 @@ class sTree{
 				
 		};
 	}
+	
 	
 void copy(yzel* stemp, yzel* ftemp){
 		if(ftemp){
