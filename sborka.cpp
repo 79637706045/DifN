@@ -38,27 +38,59 @@ class sTree{
 	yzel* root;
 	
 	
-	void delete_tree(yzel* cur){
-		if(cur){
-			delete_tree(cur->left);
-			delete_tree(cur->right);
-			delete(cur);
-		}
-	}
+	void delete_tree(yzel* cur);
 	
 	void view(yzel* cur, int level);
 	
-	void x_search(yzel* tempr, int* counter){
-			if(tempr){
-				if(tempr->type == 2){
-					(*counter)++;
-				}
-				x_search(tempr->left, counter);
-				x_search(tempr->right, counter);
-			}
-	}
+	void x_search(yzel* tempr, int* counter);
 	
-	void rek_d(yzel* stemp, yzel* ftemp){
+	void rek_d(yzel* stemp, yzel* ftemp);
+	
+	
+	void copy(yzel* stemp, yzel* ftemp);
+
+	
+	public:
+
+	//конструктор и деструктор
+	sTree(int tip, int znach){
+		std::cerr<<"Vyzvan konstryktor dly classa dif."<<std::endl;
+		root = new yzel(tip, znach);
+		std::cerr<<"Konstryktor otrabotal"<<std::endl;
+	}
+	~sTree(){
+		std::cerr<<"Vyzvan distryktor dly classa dif."<<std::endl;
+		delete_tree(this->root);
+		std::cerr<<"Distryktor otrabotal"<<std::endl;
+	}
+		
+	void sozdanye_bazovogo_dereva();
+
+	void print_dif();
+	
+	sTree* differentiate();
+};
+
+
+
+int main(){
+
+	std::cout<<"Sozdanie bazovogo dereva"<<std::endl;
+	sTree F(-1,-1);
+	F.sozdanye_bazovogo_dereva();
+	std::cout<<"Bazovoe derevo:"<<std::endl;
+	F.print_dif();
+	
+	std::cout<<"Sozdanie differencirovannogo dereva"<<std::endl;
+	sTree* pS = F.differentiate();
+	std::cout<<"Ddifferencirovannoe derevo:"<<std::endl;
+	pS->print_dif();
+	
+	delete(pS);
+	return 0;
+}
+
+void sTree::rek_d(yzel* stemp, yzel* ftemp){
 		switch (ftemp->type){
 /*****************************************/			
 			case 0 : {//цифры
@@ -199,11 +231,8 @@ class sTree{
 						stemp->value = 2;
 						stemp->right = new yzel(-1,-1);
 							
-						rek_d(stemp->right, ftemp->left);//эта хрень, только если в ftemp->left есть функции
-						//в противном случай в этот узел деление закинуть
-						//нужна функция узнавания, есть ли дерево
+						rek_d(stemp->right, ftemp->left);
 						
-						//////////////////////
 						stemp->left = new yzel(-1,-1);
 						stemp->left->type = 1;
 						stemp->left->value = 3;
@@ -217,20 +246,124 @@ class sTree{
 						}
 						
 						else{
-						stemp->type = 1;
-						stemp->value = 3;
-						
+						stemp->type = 0;
+						stemp->value = 0;
+						/*
 						stemp->right = new yzel(-1,-1);
 						copy(stemp->right, ftemp->left);
 						
 						stemp->left = new yzel(-1,-1);
 						stemp->left->type = 0;
-						stemp->left->value = 1;
+						stemp->left->value = 1;*/
 						
 						}
 						
 						break;
 					}	
+					
+					case 1 : {//sin
+						
+						int n = 0;
+						x_search(ftemp->left, &n);
+												
+						if(n > 0){
+						
+						stemp->type = 1;
+						stemp->value = 2;
+						stemp->right = new yzel(-1,-1);
+							
+						rek_d(stemp->right, ftemp->left);
+						
+						stemp->left = new yzel(-1,-1);
+						stemp->left->type = 3;
+						stemp->left->value = 2;
+						stemp->left->right = NULL;
+						
+						stemp->left->left = new yzel(-1,-1);
+						
+						copy(stemp->left->left, ftemp->left);
+						}
+						
+						else{
+						stemp->type = 0;
+						stemp->value = 0;
+						
+						}
+						
+						break;
+					}
+					
+					case 2 : {//cos
+						
+						int n = 0;
+						x_search(ftemp->left, &n);
+												
+						if(n > 0){
+						
+						stemp->type = 1;
+						stemp->value = 2;
+						stemp->right = new yzel(-1,-1);
+							
+						rek_d(stemp->right, ftemp->left);
+						
+						stemp->left = new yzel(-1,-1);
+						stemp->left->type = 1;
+						stemp->left->value = 2;
+						
+						stemp->left->right = new yzel(-1,-1);
+						stemp->left->right->type = 3;
+						stemp->left->right->value = 1;
+						
+						stemp->left->right->right = NULL;
+						
+						stemp->left->right->left = new yzel(-1,-1);
+						copy(stemp->left->right->left, ftemp->left);
+						
+						stemp->left->left = new yzel(-1,-1);
+						stemp->left->left->type = 0;
+						stemp->left->left->value = -1;
+						}
+						
+						else{
+						stemp->type = 0;
+						stemp->value = 0;
+
+						}
+						
+						break;
+					}
+					
+					case 3 : {//exp
+						
+						int n = 0;
+						x_search(ftemp->left, &n);
+												
+						if(n > 0){
+							
+						stemp->type = 1;
+						stemp->value = 2;
+						stemp->right = new yzel(-1,-1);
+							
+						rek_d(stemp->right, ftemp->left);
+						
+						stemp->left = new yzel(-1,-1);
+						stemp->left->type = 1;
+						stemp->left->value = 3;
+						
+						stemp->left->right = NULL;
+						
+						stemp->left->left = new yzel(-1,-1);
+						copy(stemp->left->left, ftemp->left);
+						}
+						
+						else{
+						stemp->type = 0;
+						stemp->value = 0;
+						}
+						
+						break;
+					}
+					
 					
 					default: {        	
     		
@@ -256,9 +389,41 @@ class sTree{
 				
 		};
 	}
+
+void sTree::print_dif(){
+	view(root,0);
+	std::cout<<std::endl;
+}
+
+sTree* sTree::differentiate(){
+		
+	sTree* pS = new sTree(-1,-1);
+			
+	rek_d(pS->root, this->root);
 	
-	
-void copy(yzel* stemp, yzel* ftemp){
+	puts(" ");
+	return pS;
+}
+
+void sTree::x_search(yzel* tempr, int* counter){
+	if(tempr){
+		if(tempr->type == 2){
+			(*counter)++;
+		}
+	x_search(tempr->left, counter);
+	x_search(tempr->right, counter);
+	}
+}
+
+void sTree::delete_tree(yzel* cur){
+	if(cur){
+		delete_tree(cur->left);
+		delete_tree(cur->right);
+		delete(cur);
+	}
+}
+
+void sTree::copy(yzel* stemp, yzel* ftemp){
 		if(ftemp){
 			
 			stemp->type = ftemp->type;
@@ -275,62 +440,6 @@ void copy(yzel* stemp, yzel* ftemp){
 			copy(stemp->left, ftemp->left);
 			copy(stemp->right, ftemp->right);
 		}
-}
-/*	void reck_for_dif(sTree* temp){
-		//в неу вузувать функксии для диффинга некоторых вещей
-	}*/
-	
-	public:
-
-	//конструктор и деструктор
-	sTree(int tip, int znach){
-		std::cerr<<"Vyzvan konstryktor dly classa dif."<<std::endl;
-		root = new yzel(tip, znach);
-		std::cerr<<"Konstryktor otrabotal"<<std::endl;
-	}
-	~sTree(){
-		std::cerr<<"Vyzvan distryktor dly classa dif."<<std::endl;
-		delete_tree(this->root);
-		std::cerr<<"Distryktor otrabotal"<<std::endl;
-	}
-		
-	void sozdanye_bazovogo_dereva();
-
-	void print_dif(){
-		view(root,0);
-		std::cout<<std::endl;
-	}
-	
-	sTree* differentiate(){//ranche differ
-	/* План: для кажого узла вызывать функцию дифференциате, котораю и трансформирует узел,
-	может она и что-то возваращать, когда умножить и поделить. */
-		
-		sTree* pS = new sTree(-1,-1);
-			
-		rek_d(pS->root, this->root);
-	
-		puts(" ");
-		return pS;
-	}
-};
-
-
-
-int main(){
-
-	std::cout<<"Sozdanie bazovogo dereva"<<std::endl;
-	sTree F(-1,-1);
-	F.sozdanye_bazovogo_dereva();
-	std::cout<<"Bazovoe derevo:"<<std::endl;
-	F.print_dif();
-	
-	std::cout<<"Sozdanie differencirovannogo dereva"<<std::endl;
-	sTree* pS = F.differentiate();
-	std::cout<<"Ddifferencirovannoe derevo:"<<std::endl;
-	pS->print_dif();
-	
-	delete(pS);
-	return 0;
 }
 
 void sTree::view(yzel* cur, int level){//рекурсивная распечатка с графическим представлением
