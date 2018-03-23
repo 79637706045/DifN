@@ -1,4 +1,4 @@
-void copy(yzel* stemp, yzel* ftemp){
+void sTree::copy(yzel* stemp, yzel* ftemp){
 		if(ftemp){
 			
 			stemp->type = ftemp->type;
