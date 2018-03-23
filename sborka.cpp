@@ -42,6 +42,8 @@ class sTree{
 	
 	void view(yzel* cur, int level);
 	
+	void view_helper(yzel* cur);
+	
 	void x_search(yzel* tempr, int* counter);
 	
 	void rek_d(yzel* stemp, yzel* ftemp);
@@ -87,6 +89,99 @@ int main(){
 	delete(pS);
 	return 0;
 }
+
+	void sTree::view_helper(yzel* cur){
+		
+		switch(cur->type){
+			
+			case 0 : {
+				std::cout<<cur->value<<std::endl;
+				break;
+			}
+			
+			case 1 : {
+				
+				switch(cur->value){
+					
+					case 0 : {
+						std::cout<<"+"<<std::endl;
+						break;
+					}
+					
+					case 1 : {
+						std::cout<<"-"<<std::endl;
+						break;
+					}
+					
+					case 2 : {
+						std::cout<<"*"<<std::endl;
+						break;
+					}
+					
+					case 3 : {
+						std::cout<<"/"<<std::endl;
+						break;
+					}
+					
+					default : {
+						std::cout<<"tip: "<<cur->type<<" znachenie: "<<cur->value<<std::endl;
+						break;
+					}
+					
+				}
+				
+				break;
+			}
+			
+			case 2 : {
+				
+				std::cout<<"x_"<<cur->value<<std::endl;
+				break;
+			}
+			
+			case 3 : {
+				
+				switch(cur->value){
+					
+					case 0 : {
+						std::cout<<"ln"<<std::endl;
+						break;
+					}
+					
+					case 1 : {
+						std::cout<<"sin"<<std::endl;
+						break;
+					}
+					
+					case 2 : {
+						std::cout<<"cos"<<std::endl;
+						break;
+					}
+					
+					case 3 : {
+						std::cout<<"exp"<<std::endl;
+						break;
+					}
+					
+					default : {
+						std::cout<<"tip: "<<cur->type<<" znachenie: "<<cur->value<<std::endl;
+						break;
+					}
+					
+				}
+				
+				break;
+			}
+			
+			default : {
+				std::cout<<"tip: "<<cur->type<<" znachenie: "<<cur->value<<std::endl;
+				break;
+			}
+			
+		}
+		
+		
+	}
 
 void sTree::rek_d(yzel* stemp, yzel* ftemp){
 		switch (ftemp->type){
@@ -444,10 +539,12 @@ void sTree::view(yzel* cur, int level){//рекурсивная распечатка с графическим пр
 		if(cur){
 			view(cur->right , level+1);//вывод правого поддерева
 			for(int i = 0; i<level; i++){
-				std::cout<<"                     ";
+				std::cout<<"            ";
 			} 	
-		
-			std::cout<<"tip: "<<cur->type<<" znachenie: "<<cur->value<<std::endl;
+			
+			view_helper(cur);
+			
+			//std::cout<<"tip: "<<cur->type<<" znachenie: "<<cur->value<<std::endl;
 
 			view(cur->left , level+1);//вывод левого поддерева
 		}
