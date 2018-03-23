@@ -71,8 +71,6 @@ class sTree{
 	sTree* differentiate();
 };
 
-
-
 int main(){
 
 	std::cout<<"Sozdanie bazovogo dereva"<<std::endl;
@@ -455,7 +453,6 @@ void sTree::view(yzel* cur, int level){//рекурсивная распечатка с графическим пр
 		}
 }
 
-
 void sTree::sozdanye_bazovogo_dereva(){
 	
 /*
@@ -478,5 +475,4 @@ void sTree::sozdanye_bazovogo_dereva(){
 	this->root->right->right = new yzel(0,48);
 	this->root->right->left->left = new yzel(2,0);
 	this->root->left->left->right = NULL;
-}
-	
+}	
